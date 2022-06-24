@@ -1,11 +1,7 @@
 import { Client, Collection } from 'discord.js';
 import intentsList from '../constants/intentsList.js';
 import config from '../../../config.js';
-import getFiles from '../functions/getFiles.js';
 import 'dotenv/config';
-
-const token = process.env.token;
-// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 class Byte extends Client {
 	constructor() {
@@ -17,17 +13,10 @@ class Byte extends Client {
 	}
 
 	async start() {
-		await this.login(token);
+		await this.login(process.env.TOKEN);
 	}
-
-	async loadEvents() {
-		getFiles(`./src/events`, '.js').forEach(async (fileName) => {
-			const eventName = fileName.split('.js')[0];
-			const Event = (await import(`../../events/${fileName}`)).default;
-			const event = new Event(this, eventName);
-			event.startListener();
-			this.events.set(eventName, event);
-		});
+	getCommand(commandName) {
+		return this.commands.get(commandName);
 	}
 }
 

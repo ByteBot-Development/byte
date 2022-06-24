@@ -8,7 +8,7 @@ class Event {
 		try {
 			await this.run(...args);
 		} catch (error) {
-			this.client.handleError(error);
+			console.error(error);
 		}
 	}
 
