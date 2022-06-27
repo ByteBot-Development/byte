@@ -1,9 +1,8 @@
-import Command from '../lib/classes/Command.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-class Ping extends Command {
-	async run(message) {
-		message.reply('pong!');
-	}
-}
-
-export default Ping;
+export const ping = {
+	data: new SlashCommandBuilder().setName('ping').setDescription('pong dude!'),
+	run(client, interaction) {
+		interaction.reply('Hello!');
+	},
+};

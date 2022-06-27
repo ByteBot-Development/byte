@@ -1,0 +1,15 @@
+{
+  "command": {
+    "prefix": "cmd",
+    "description": "command template",
+    "body": [
+      "import Command from '../lib/classes/Command.js';",
+      "",
+      "class ${1:CommadName} extends Command {",
+      "\tasync run(message) {",
+      "\t\t$2",
+      "\t}",
+      "}"
+    ],
+  }
+}

@@ -1,10 +1,12 @@
 import Byte from './lib/classes/Byte.js';
 import loadCommands from './lib/functions/loadCommands.js';
 import loadEvents from './lib/functions/loadEvents.js';
+import connectDatabase from './lib/functions/connectDatabase.js';
 
-const client = new Byte();
+export const client = new Byte();
 
-loadEvents(client);
-loadCommands(client);
+connectDatabase();
+loadEvents();
+loadCommands();
 
 client.start();
