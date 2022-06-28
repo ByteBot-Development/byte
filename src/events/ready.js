@@ -12,13 +12,10 @@ class Ready extends Event {
 		const { registerSlashcommandGlobally } = config;
 
 		registerSlashcommandGlobally
-			? await rest
-					.put(Routes.applicationCommands(CLIENT_ID), { body: commandData })
-					.then(() => console.log('Registered Application (/) Commands globally.'))
-			: await rest
-					.put(Routes.applicationGuildCommands(CLIENT_ID, TEST_GUILD_ID), { body: commandData })
-					.then(() => console.log('Registered Application (/) Commands Locally.'));
+			? await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commandData })
+			: await rest.put(Routes.applicationGuildCommands(CLIENT_ID, TEST_GUILD_ID), { body: commandData });
 
+		console.log(`Registered Application (/) Commands ${registerSlashcommandGlobally ? 'Globally' : 'Locally'}!`);
 		console.log(`Connected to Discord via ${this.client.user.tag}!`);
 	}
 }
