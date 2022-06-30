@@ -13,7 +13,7 @@ export const evalcmd = {
 	},
 
 	async run(client, interaction) {
-		return interaction.reply('This command is under maintainance!');
+		//return interaction.reply('This command is under maintainance!');
 
 		if (!config.devs.includes(interaction.user.id))
 			return await interaction.reply({
@@ -44,7 +44,7 @@ export const evalcmd = {
 			code = code.replace(`token`, '[Something Important]');
 			let output;
 
-			let evaled = await evalcmd(evalCode);
+			let evaled = await eval(evalCode);
 
 			output = evaled;
 
