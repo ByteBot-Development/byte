@@ -31,7 +31,7 @@ async function handleCommands(client, interaction) {
 
 				if (command.settings.ownerOnly && interaction.member.id !== interaction.guild.ownerId) {
 					return interaction.reply({
-						content: 'This command is only availabe to the owner of Byte!',
+						content: 'This command is only availabe to the owner of the server!',
 						ephemeral: true,
 					});
 				}
