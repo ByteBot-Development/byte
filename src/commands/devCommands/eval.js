@@ -8,7 +8,13 @@ export const evalcmd = {
 		.setDescription(`Evaluates the given code`)
 		.addStringOption((code) => code.setName(`code`).setDescription(`Code to be evaled`).setRequired(true)),
 
+	settings: {
+		devOnly: true,
+	},
+
 	async run(client, interaction) {
+		return interaction.reply('This command is under maintainance!');
+
 		if (!config.devs.includes(interaction.user.id))
 			return await interaction.reply({
 				content: `This command can only be used by developers!`,
@@ -38,7 +44,7 @@ export const evalcmd = {
 			code = code.replace(`token`, '[Something Important]');
 			let output;
 
-			let evaled = await eval(evalCode);
+			let evaled = await evalcmd(evalCode);
 
 			output = evaled;
 
@@ -97,3 +103,5 @@ export const evalcmd = {
 		}
 	},
 };
+
+export default evalcmd;
