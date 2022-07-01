@@ -4,7 +4,7 @@ import { MessageActionRow, MessageButton } from 'discord.js';
 import { promisify } from 'util';
 const help = {
 	data: new SlashCommandBuilder().setName('help').setDescription('help menu'),
-	run(client, interaction) {
+	async run(client, interaction) {
 		try {
 			const row = new MessageActionRow().addComponents(
 				new MessageButton().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
@@ -20,7 +20,7 @@ const help = {
 				.setDescription('In order to use the bot, use the prefix ``-`` to use any commands.')
 				.setColor('#384281');
 
-			interaction.reply({
+			await interaction.reply({
 				embeds: [HelpEmbed],
 				components: [row],
 				ephemeral: true,
@@ -74,7 +74,7 @@ const help = {
 					const wait = promisify(setTimeout);
 
 					await wait(1000);
-					ButtonInteraction.update({ embeds: [infoEmbed], components: [row2] });
+					await ButtonInteraction.update({ embeds: [infoEmbed], components: [row2] });
 				}
 
 				if (ButtonInteraction.customId === 'Mod') {
@@ -126,7 +126,7 @@ const help = {
 
 					const wait = promisify(setTimeout);
 
-					ButtonInteraction.update({
+					await ButtonInteraction.update({
 						embeds: [infoEmbed],
 						components: [row2],
 					}).catch((err) => {
@@ -168,7 +168,7 @@ const help = {
 						});
 					// .setFooter("Prefix: ;")
 					const wait = promisify(setTimeout);
-					ButtonInteraction.update({
+					await ButtonInteraction.update({
 						embeds: [infoEmbed],
 						components: [row2],
 					}).catch((err) => {
@@ -194,7 +194,7 @@ const help = {
 
 					const wait = promisify(setTimeout);
 
-					ButtonInteraction.update({
+					await ButtonInteraction.update({
 						embeds: [HelpEmbed],
 						components: [row4],
 					}).catch((err) => {
