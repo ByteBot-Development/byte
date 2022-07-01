@@ -1,5 +1,6 @@
 import Event from '../lib/classes/Event.js';
 import commandList from '../lib/utils/commandList.js';
+import blacklistSchema from '../lib/models/blacklistSchema.js'
 
 class InteractionCreate extends Event {
 	run(interaction) {
@@ -10,17 +11,15 @@ class InteractionCreate extends Event {
 async function handleCommands(client, interaction) {
 	for (const command of commandList) {
 		if (interaction.commandName === command.data.name) {
+			let check = await blacklistSchema.findOne({
+				client: client.user.id
+			})
+
+			if(check.userId.includes(interaction.member.id)) return await interaction.reply({
+				content: `You have been blacklisted from ${client.user.username}! You can no longer use any commands in this bot!`,
+				ephemeral: true
+			})
 			if (command.settings != undefined) {
-				// if (
-				// 	command.settings.permissions &&
-				// 	command.settings.permissions.length > 0 &&
-				// 	!interaction.member.permissions.has(command.settings.permissions)
-				// ) {
-				// 	return interaction.reply({
-				// 		content: "You don't have the required permissions to run this command!",
-				// 		ephemeral: true,
-				// 	});
-				// }
 
 				if (command.settings.devOnly && !client.config.devs.includes(interaction.member.id)) {
 					return interaction.reply({

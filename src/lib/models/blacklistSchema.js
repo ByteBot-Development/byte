@@ -1,4 +1,5 @@
-import { model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
+const { model, Schema } = mongoose;
 
 const blacklistSchema = model(
 	'blacklistSchema',
@@ -7,5 +8,10 @@ const blacklistSchema = model(
 			type: Array,
 			required: true,
 		},
+		client: {
+			type: String,
+		}
 	})
 );
+
+export default blacklistSchema;
