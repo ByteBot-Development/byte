@@ -3,13 +3,22 @@
     "prefix": "cmd",
     "description": "command template",
     "body": [
-      "import Command from '../lib/classes/Command.js';",
+      "import { SlashCommandBuilder } from '@discordjs/builders'",
       "",
-      "class ${1:CommadName} extends Command {",
-      "\tasync run(message) {",
-      "\t\t$2",
-      "\t}",
-      "}"
+      "const ${1:name} = {",
+      "\tdata: new SlashCommandBuilder()",
+      "\t\t.setName('${1:name}')",
+      "\t\t.setDescription('${2:text}')$3,",
+      "\tsettings: {",
+      "\t\tdevOnly: ${4:false}",
+      "\t},",
+      "",
+      "\tasync run(client, interaction) {",
+      "\t\t$5",
+      "\t},",
+      "};",
+      "",
+      "export default ${1:name};",
     ],
   }
 }

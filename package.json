@@ -25,5 +25,8 @@
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "mongoose": "^6.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
   }
 }
