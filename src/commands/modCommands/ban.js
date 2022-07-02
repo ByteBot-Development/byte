@@ -51,7 +51,7 @@ const ban = {
 			.setDescription(`${member} has been successfully banned`)
 			.setFooter({
 				text: interaction.user.tag,
-				iconUrl: interaction.user.displayAvatarURL(),
+				iconUrl: interaction.member.displayAvatarURL(),
 			})
 			.setColor(`GREEN`);
 
@@ -61,7 +61,7 @@ const ban = {
 			.addField(`Responsible Moderator`, `${interaction.user.tag}(${interaction.member.id})`)
 			.setFooter({
 				text: interaction.user.tag,
-				iconUrl: interaction.user.displayAvatarURL(),
+				iconUrl: interaction.member.displayAvatarURL(),
 			})
 			.setColor(`DARK_RED`);
 
