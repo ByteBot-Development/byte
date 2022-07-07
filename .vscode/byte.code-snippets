@@ -20,5 +20,20 @@
       "",
       "export default ${1:name};",
     ],
+  },
+  "event": {
+    "prefix": "evnt",
+    "description": "Event Template",
+    "body": [
+      "import Event from '../lib/classes/Event.js';",
+      "",
+      "class ${1:EventName} extends Event {",
+      "\trun($2) {",
+      "\t\t$3",
+      "\t}",
+      "}",
+      "",
+      "export default ${1:EventName};"
+    ]
   }
 }
