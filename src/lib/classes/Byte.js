@@ -20,9 +20,6 @@ class Byte extends Client {
 	async start() {
 		await this.login(process.env.TOKEN);
 	}
-	getCommand(commandName) {
-		return this.commands.get(commandName);
-	}
 }
 
 export default Byte;
