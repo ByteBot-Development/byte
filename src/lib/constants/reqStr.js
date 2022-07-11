@@ -1,7 +1,7 @@
-import { SchemaTypes } from 'mongoose';
+import mongoose from 'mongoose';
 
 const reqStr = {
-	type: SchemaTypes.String,
+	type: mongoose.SchemaTypes.String,
 	required: true,
 };
 

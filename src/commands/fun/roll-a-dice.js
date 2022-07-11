@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed } from 'discord.js';
-import getRandomNumber from '../../lib/functions/getRandomNumber.js';
 
 const rollDice = {
 	data: new SlashCommandBuilder()
@@ -38,7 +37,6 @@ const rollDice = {
 			case 6:
 				diceString = `⬛⬛⬛⬛⬛\n⬛🟦⬛🟦⬛\n⬛🟦⬛🟦⬛\n⬛🟦⬛🟦⬛\n⬛⬛⬛⬛⬛`;
 		}
-		// return console.log(random);
 
 		const embed = new MessageEmbed()
 			.setTitle('Your dice of fortune!')
