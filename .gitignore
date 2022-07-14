@@ -1,3 +1,8 @@
+# Customs (Don't wonder what this is, it's a suprise!)
+backend/
+Routes/
+Dashboard/
+
 # Logs
 logs
 *.log
