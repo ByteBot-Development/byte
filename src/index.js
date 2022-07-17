@@ -4,7 +4,7 @@ import loadEvents from './lib/functions/loadEvents.js';
 import connectDatabase from './lib/functions/connectDatabase.js';
 
 
-export const client = new Byte();
+export const client = (global.client = new Byte())
 
 connectDatabase();
 loadEvents();
