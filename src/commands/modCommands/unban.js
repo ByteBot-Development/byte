@@ -18,6 +18,10 @@ const unban = {
 	},
 
 	async run(client, interaction) {
+		if (!interaction.guild.me.permissions.has(`BAN_MEMBERS`))
+			return await interaction.reply({
+				content: `I do not have permissions to do that! Make sure that I have the \`BAN MEMBERS\` permission.`,
+			});
 		const userId = interaction.options.getString('user-id');
 		const reason = interaction.options.getString('reason');
 		const embed = new EmbedBuilder().setTitle('User Unbanned!').setDescription();

@@ -23,7 +23,7 @@ const setup = {
 	},
 
 	async run(client, interaction) {
-		subcmd = interaction.options.getSubcommand();
+		let subcmd = interaction.options.getSubcommand();
 		if (subcmd == 'welcome-channel') {
 			return setupWelcomeChannel(client, interaction);
 		} else if (subcmd == 'leave-message') {
