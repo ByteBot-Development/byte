@@ -1,12 +1,12 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Permissions, MessageEmbed } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { PermissionsBitField, EmbedBuilder } from 'discord.js';
 import guildConfigSchema from '../../lib/models/guildConfigSchema.js';
 
 const setup = {
 	data: new SlashCommandBuilder()
 		.setName('setup')
 		.setDescription('setup features of the bot for your server!')
-		.setDefaultMemberPermissions(Permissions.FLAGS.ADMINISTRATOR)
+		.setDefaultMemberPermissions(PermissionsBitField.ADMINISTRATOR)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName('welcome-channel')
@@ -43,7 +43,7 @@ async function setupWelcomeChannel(client, interaction) {
 
 	await interaction.reply({
 		embeds: [
-			new MessageEmbed()
+			new EmbedBuilder()
 				.setTitle('Success!')
 				.setColor('GREEN')
 				.setDescription(`Successfully set the welcome channel to ${channel}.`)

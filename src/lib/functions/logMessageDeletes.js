@@ -1,8 +1,8 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import logsSchema from '../models/logsSchema';
 
 function logMessageDeletes(client, message) {
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle('Message Deleted!')
 		.setDescription(
 			`Message deleted in ${message.channel} by ${message.author}. Content: \`\`\`\n${

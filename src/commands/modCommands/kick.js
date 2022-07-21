@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { InteractionCollector, Message, MessageEmbed } from 'discord.js';
+import { InteractionCollector, Message, EmbedBuilder } from 'discord.js';
 const kick = {
 	data: new SlashCommandBuilder()
 		.setName(`kick`)
@@ -23,7 +23,7 @@ const kick = {
 		if (member.id === interaction.guild.ownerId)
 			return await interaction.reply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setTitle(`Denied`)
 						.setDescription(`You cannot kick the owner of this server!`)
 						.setColor(`RED`)
@@ -38,7 +38,7 @@ const kick = {
 		if (member.id === interaction.user.id)
 			return await interaction.reply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setTitle(`Failed`)
 						.setDescription(`You cannot kick yourself!`)
 						.setColor(`RED`)
@@ -53,7 +53,7 @@ const kick = {
 		if (userHighestRole <= memberHighestRole)
 			return await interaction.reply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setTitle(`Failed`)
 						.setDescription(
 							`You cannot kick this user because your role's highest position ${
@@ -68,7 +68,7 @@ const kick = {
 		if (meHighestRole <= memberHighestRole)
 			return await interaction.reply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setTitle(`Failed`)
 						.setDescription(
 							`I cannot kick this user because my role's highest position ${
@@ -80,7 +80,7 @@ const kick = {
 				ephemeral: true,
 			});
 
-		const sendEmbed = new MessageEmbed()
+		const sendEmbed = new EmbedBuilder()
 			.setTitle(`Kicked`)
 			.setDescription(`${member} has been successfully kicked`)
 			.setFooter({
@@ -89,7 +89,7 @@ const kick = {
 			})
 			.setColor(`GREEN`);
 
-		const kicked = new MessageEmbed()
+		const kicked = new EmbedBuilder()
 			.setTitle(`Kicked`)
 			.setDescription(`You have been kicked in ${interaction.guild.name}`)
 			.addField(`Responsible Moderator`, `${interaction.user.tag}(${interaction.member.id})`)
@@ -122,7 +122,7 @@ const kick = {
 			console.log(err);
 			await interaction.channel.send({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setTitle(`Failed`)
 						.setDescription(
 							`Couldnt kick ${member}! Make sure my role has the \`KICK MEMBERS\` permission.`

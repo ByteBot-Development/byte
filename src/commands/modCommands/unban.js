@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 const unban = {
 	data: new SlashCommandBuilder()
@@ -20,7 +20,7 @@ const unban = {
 	async run(client, interaction) {
 		const userId = interaction.options.getString('user-id');
 		const reason = interaction.options.getString('reason');
-		const embed = new MessageEmbed().setTitle('User Unbanned!').setDescription();
+		const embed = new EmbedBuilder().setTitle('User Unbanned!').setDescription();
 	},
 };
 

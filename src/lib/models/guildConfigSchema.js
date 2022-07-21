@@ -4,8 +4,19 @@ const { Schema, model, SchemaTypes } = mongoose;
 const guildConfigSchema = model(
 	'guildConfigSchema',
 	new Schema({
-		guildId: reqStr,
-		welcomeChannelId: SchemaTypes.String,
+		guildId: {
+			type: SchemaTypes.String,
+			required: true,
+			unique: true,
+		},
+		welcomeChannelId: {
+			type: SchemaTypes.String,
+			required: false,
+		},
+		modmailCategory: {
+			type: SchemaTypes.String,
+			required: false,
+		},
 	})
 );
 

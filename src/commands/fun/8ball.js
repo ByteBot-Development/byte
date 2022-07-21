@@ -1,5 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 const _8ball = {
 	data: new SlashCommandBuilder()
@@ -18,7 +18,7 @@ const _8ball = {
 		const random = Math.floor(Math.random() * answers.length);
 		const reply = answers[random];
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Q: ' + question)
 			.setDescription(`- ${reply}`)
 			.setAuthor({

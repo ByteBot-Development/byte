@@ -1,5 +1,9 @@
-import { Intents } from "discord.js";
+import { GatewayIntentBits } from 'discord.js';
 
-const intentsList = [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES];
+const intentsList = [
+	GatewayIntentBits.Guilds,
+	GatewayIntentBits.GuildMembers,
+	GatewayIntentBits.GuildMessages,
+];
 
 export default intentsList;

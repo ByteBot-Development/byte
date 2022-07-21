@@ -1,5 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 const whois = {
 	data: new SlashCommandBuilder()
@@ -15,7 +15,7 @@ const whois = {
 	async run(client, interaction) {
 		const user = interaction.options.getUser('user');
 		const target = interaction.guild.members.cache.get(user.id);
-		let embed = new MessageEmbed()
+		let embed = new EmbedBuilder()
 			.setColor('BLURPLE')
 			.setTitle(`${user.tag}'s Userinfo`)
 			.setThumbnail(user.displayAvatarURL({ dynamic: true }))

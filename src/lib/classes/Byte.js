@@ -1,4 +1,4 @@
-import { Client, Collection, MessageEmbed } from 'discord.js';
+import { Client, Collection, EmbedBuilder } from 'discord.js';
 import intentsList from '../constants/intentsList.js';
 import config from '../../../config.js';
 import 'dotenv/config';
@@ -13,7 +13,7 @@ class Byte extends Client {
 	}
 	async sendError(interaction, title, description) {
 		await interaction.reply({
-			embeds: [new MessageEmbed().setTitle(title).setDescription(description).setColor('RED')],
+			embeds: [new EmbedBuilder().setTitle(title).setDescription(description).setColor('RED')],
 			ephemeral: true,
 		});
 	}
