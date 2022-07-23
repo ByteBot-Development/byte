@@ -1,11 +1,16 @@
-import { Client, Collection, EmbedBuilder } from 'discord.js';
-import intentsList from '../constants/intentsList.js';
+import { Client, Collection, EmbedBuilder, Partials } from 'discord.js';
+import intents from '../constants/intents.js';
 import config from '../../../config.js';
 import 'dotenv/config';
+import partials from '../constants/partials.js';
 
 class Byte extends Client {
 	constructor() {
-		super({ intents: intentsList, allowedMentions: { parse: ['users'] } });
+		super({
+			intents,
+			partials,
+			allowedMentions: { parse: ['users'] },
+		});
 		this.config = config;
 		this.commands = new Collection();
 		this.events = new Collection();
