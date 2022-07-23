@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 const ping = {
 	data: new SlashCommandBuilder().setName('ping').setDescription('pong dude!'),

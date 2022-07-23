@@ -1,7 +1,7 @@
 import Event from '../lib/classes/Event.js';
 import schema from '../lib/models/blacklistSchema.js';
 import util from 'util';
-import { EmbedBuilder } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 class MessageCreate extends Event {
 	async run(message) {
 		if (message.author.bot) return;
@@ -11,20 +11,18 @@ class MessageCreate extends Event {
 
 		if (cmd === 'blacklist') {
 			if (!args[0] || args[0] == ` `)
-				return message.reply({
-					embeds: [
-						new EmbedBuilder()
-							.setTitle(`Blacklist subcommands`)
-							.setDescription(
-								`• add ~ \`Adds a blacklisted user\`\n• remove ~ \`Removes a blacklisted user!\``
-							)
-							.setColor(`AQUA`),
-					],
-				});
+			return message.reply({
+				embeds: [
+					new MessageEmbed()
+						.setTitle(`Blacklist subcommands`)
+						.setDescription(`• add ~ \`Adds a blacklisted user\`\n• remove ~ \`Removes a blacklisted user!\``)
+						.setColor(`AQUA`),
+				],
+			});
 
 			let member = Number(args[1]);
 
-			let userCheck = `(${member})`;
+			let userCheck = `(${member})`
 
 			let check = await schema.findOne({
 				client: client.user.id,
@@ -33,7 +31,7 @@ class MessageCreate extends Event {
 			if (!member)
 				return message.reply({
 					embeds: [
-						new EmbedBuilder()
+						new MessageEmbed()
 							.setTitle(`Invalid Usage`)
 							.setDescription(`Please provide an id!`)
 							.setColor(`DARK_ORANGE`)
@@ -44,11 +42,14 @@ class MessageCreate extends Event {
 					],
 				});
 
+
+
 			if (args[0] === `add`) {
+
 				if (check && check.userId.includes(member))
 					return message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Already Blacklisted`)
 								.setDescription(`That user is already blacklisted!`)
 								.setColor(`ORANGE`)
@@ -62,7 +63,7 @@ class MessageCreate extends Event {
 				if (isNaN(member))
 					return message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Invalid ID`)
 								.setDescription(`User-ID's must be a number!`)
 								.setColor(`RED`)
@@ -75,7 +76,7 @@ class MessageCreate extends Event {
 				blacklist(this.client, member).then(() => {
 					message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Blacklisted`)
 								.setDescription(`${userCheck} has been blacklisted from ${client.user.username}!`)
 								.setColor(`GREEN`)
@@ -90,7 +91,7 @@ class MessageCreate extends Event {
 				if (isNaN(member))
 					return message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Invalid ID`)
 								.setDescription(`User-ID's must be a number!`)
 								.setColor(`RED`)
@@ -104,7 +105,7 @@ class MessageCreate extends Event {
 				if (!check)
 					return message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`No Blacklists!`)
 								.setDescription(
 									`There aren't any blacklists just yet! But if you see someone doing something wrong, Dont hesitate to swing that almighty hammer!`
@@ -116,7 +117,7 @@ class MessageCreate extends Event {
 				if (!check.userId.includes(member))
 					return message.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Not Found!`)
 								.setDescription(
 									`That user was not found in the database! Use \`--blacklist add (user-id)\` to blacklist a user!`
@@ -129,10 +130,10 @@ class MessageCreate extends Event {
 						],
 					});
 
-				unBlacklist(this.client, member).then(() => {
-					message.reply({
-						embeds: [
-							new EmbedBuilder()
+					unBlacklist(this.client, member).then(() => {
+						message.reply({
+							embeds: [
+								new MessageEmbed()
 								.setTitle(`Blacklist removed!`)
 								.setDescription(`${userCheck} has been removed from blacklist!`)
 								.setColor(`GREEN`)
@@ -140,9 +141,9 @@ class MessageCreate extends Event {
 									text: message.author.username,
 									iconURL: message.author.displayAvatarURL(),
 								}),
-						],
-					});
-				});
+							]
+						})
+					})
 			}
 		}
 	}
@@ -156,7 +157,7 @@ async function blacklist(client, user) {
 	});
 
 	if (!checking) {
-		await schema.create({
+      await schema.create({
 			client: client.user.id,
 		});
 	}
@@ -174,14 +175,11 @@ async function blacklist(client, user) {
 }
 
 async function unBlacklist(client, user) {
-	await schema.findOneAndUpdate(
-		{
-			client: client.user.id,
-		},
-		{
-			$pull: {
-				userId: user,
-			},
+	await schema.findOneAndUpdate({
+		client: client.user.id
+	}, {
+		$pull: {
+			userId: user
 		}
-	);
+	})
 }

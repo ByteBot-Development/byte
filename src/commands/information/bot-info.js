@@ -1,5 +1,5 @@
-import { SlashCommandBuilder } from 'discord.js';
-import { EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
 
 const botInfo = {
 	data: new SlashCommandBuilder()
@@ -13,7 +13,7 @@ const botInfo = {
 		const devsArray = getBotDevs(client);
 		const devsNames = formatString(devsArray.toString());
 
-		let infoembed = new EmbedBuilder()
+		let infoembed = new MessageEmbed()
 
 			.setTitle('Bot information')
 			.setDescription(

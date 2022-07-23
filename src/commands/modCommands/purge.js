@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { EmbedBuilder } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 
 const purge = {
 	data: new SlashCommandBuilder()
@@ -28,7 +28,7 @@ const purge = {
 		interaction.channel.bulkDelete(amount, true).then(() =>
 			interaction.reply({
 				embeds: [
-					new EmbedBuilder()
+					new MessageEmbed()
 						.setTitle('Success!')
 						.setDescription(`Successfully deleted ${amount} messages!`),
 				],

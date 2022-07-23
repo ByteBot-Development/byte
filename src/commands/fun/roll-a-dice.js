@@ -1,5 +1,5 @@
-import { SlashCommandBuilder } from 'discord.js';
-import { EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
 
 const rollDice = {
 	data: new SlashCommandBuilder()
@@ -38,7 +38,7 @@ const rollDice = {
 				diceString = `⬛⬛⬛⬛⬛\n⬛🟦⬛🟦⬛\n⬛🟦⬛🟦⬛\n⬛🟦⬛🟦⬛\n⬛⬛⬛⬛⬛`;
 		}
 
-		const embed = new EmbedBuilder()
+		const embed = new MessageEmbed()
 			.setTitle('Your dice of fortune!')
 			.setDescription(`You got a **${random}!**\n\n${diceString}`)
 			.setColor('GREEN')

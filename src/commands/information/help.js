@@ -1,24 +1,21 @@
-import { SlashCommandBuilder } from 'discord.js';
-import { EmbedBuilder } from 'discord.js';
-import { ActionRowBuilder, ButtonBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
+import { MessageActionRow, MessageButton } from 'discord.js';
 import { promisify } from 'util';
 const help = {
 	data: new SlashCommandBuilder().setName('help').setDescription('help menu'),
 	async run(client, interaction) {
 		try {
-			const row = new ActionRowBuilder().addComponents(
-				new ButtonBuilder().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
-				new ButtonBuilder().setCustomId('Mod').setLabel('Moderation Commands').setStyle('PRIMARY'),
-				new ButtonBuilder()
-					.setCustomId('Config')
-					.setLabel('Configuation Commands')
-					.setStyle('PRIMARY')
+			const row = new MessageActionRow().addComponents(
+				new MessageButton().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
+				new MessageButton().setCustomId('Mod').setLabel('Moderation Commands').setStyle('PRIMARY'),
+				new MessageButton().setCustomId('Config').setLabel('Configuation Commands').setStyle('PRIMARY')
 			);
-			const row2 = new ActionRowBuilder().addComponents(
-				new ButtonBuilder().setCustomId('Back').setLabel('back').setStyle('PRIMARY')
+			const row2 = new MessageActionRow().addComponents(
+				new MessageButton().setCustomId('Back').setLabel('back').setStyle('PRIMARY')
 			);
 
-			const HelpEmbed = new EmbedBuilder()
+			const HelpEmbed = new MessageEmbed()
 				.setTitle('``Help Panel``')
 				.setDescription('In order to use the bot, use the prefix ``-`` to use any commands.')
 				.setColor('#384281');
@@ -36,7 +33,7 @@ const help = {
 				// await ButtonInteraction.deferUpdate()
 
 				if (ButtonInteraction.customId === 'Main') {
-					const infoEmbed = new EmbedBuilder()
+					const infoEmbed = new MessageEmbed()
 						.setTitle('```Info Commands```')
 						.setColor('#384281')
 
@@ -81,7 +78,7 @@ const help = {
 				}
 
 				if (ButtonInteraction.customId === 'Mod') {
-					const infoEmbed = new EmbedBuilder()
+					const infoEmbed = new MessageEmbed()
 						.setTitle('```Moderation Commands```')
 						.setColor('#384281')
 
@@ -142,7 +139,7 @@ const help = {
 				}
 
 				if (ButtonInteraction.customId === 'Config') {
-					const infoEmbed = new EmbedBuilder()
+					const infoEmbed = new MessageEmbed()
 						.setTitle('```Configuation Commands```')
 						.setColor('#384281')
 
@@ -184,21 +181,15 @@ const help = {
 				}
 
 				if (ButtonInteraction.customId === 'Back') {
-					const HelpEmbed = new EmbedBuilder()
+					const HelpEmbed = new MessageEmbed()
 						.setTitle('``Help Panel``')
 						.setDescription('In order to use the bot, use the prefix ``/`` to use any commands.')
 						.setColor('#384281');
 
-					const row4 = new ActionRowBuilder().addComponents(
-						new ButtonBuilder().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
-						new ButtonBuilder()
-							.setCustomId('Mod')
-							.setLabel('Moderation Commands')
-							.setStyle('PRIMARY'),
-						new ButtonBuilder()
-							.setCustomId('Config')
-							.setLabel('Configuation Commands')
-							.setStyle('PRIMARY')
+					const row4 = new MessageActionRow().addComponents(
+						new MessageButton().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
+						new MessageButton().setCustomId('Mod').setLabel('Moderation Commands').setStyle('PRIMARY'),
+						new MessageButton().setCustomId('Config').setLabel('Configuation Commands').setStyle('PRIMARY')
 					);
 
 					const wait = promisify(setTimeout);

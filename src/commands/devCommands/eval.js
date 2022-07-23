@@ -1,14 +1,12 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import config from '../../../config.js';
 import util from 'util';
-import { EmbedBuilder } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 export const evalcmd = {
 	data: new SlashCommandBuilder()
 		.setName(`eval`)
 		.setDescription(`Evaluates the given code`)
-		.addStringOption((code) =>
-			code.setName(`code`).setDescription(`Code to be evaled`).setRequired(true)
-		),
+		.addStringOption((code) => code.setName(`code`).setDescription(`Code to be evaled`).setRequired(true)),
 
 	settings: {
 		devOnly: true,
@@ -31,7 +29,7 @@ export const evalcmd = {
 				if (check === null || check === undefined) {
 					return await interaction.reply({
 						embeds: [
-							new EmbedBuilder()
+							new MessageEmbed()
 								.setTitle(`Denied`)
 								.setDescription(`No valid code has been placed after expression \`await\``)
 								.setColor(`ORANGE`),
@@ -41,9 +39,7 @@ export const evalcmd = {
 				}
 			}
 
-			let evalCode = code.includes(`await`)
-				? `;(async () => { ${code} })().then(output =>  output)`
-				: code;
+			let evalCode = code.includes(`await`) ? `;(async () => { ${code} })().then(output =>  output)` : code;
 
 			code = code.replace(`token`, '[Something Important]');
 			let output;
@@ -64,7 +60,7 @@ export const evalcmd = {
 			try {
 				await interaction.reply({
 					embeds: [
-						new EmbedBuilder()
+						new MessageEmbed()
 							.setTitle(`Evaled`)
 							.setDescription(`\`\`\`js\n${code}\n\`\`\``)
 							.addField(`Output`, output)
@@ -78,7 +74,7 @@ export const evalcmd = {
 			} catch {
 				await interaction.followUp({
 					embeds: [
-						new EmbedBuilder()
+						new MessageEmbed()
 							.setTitle(`Evaled`)
 							.setDescription(`\`\`\`js\n${code}\n\`\`\``)
 							.addField(`Output`, output)
@@ -93,7 +89,7 @@ export const evalcmd = {
 		} catch (err1) {
 			return await interaction.reply({
 				embeds: [
-					new EmbedBuilder()
+					new MessageEmbed()
 						.setTitle(`Error`)
 						.setDescription(`\`\`\`js\n${code}\n\`\`\``)
 						.addField(`Output`, `\`\`\`js\n${err1}\n\`\`\``)
