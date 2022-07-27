@@ -7,8 +7,9 @@ class GuildMemberAdd extends Event {
 		guildConfigSchema.findOne({ guildId: member.guild.id }, async (err, data) => {
 			if (err) throw err;
 			if (data) {
-				if (data.welcomeChannelId) {
-					member.guild.channels.cache.get(data.welcomeChannelId).send(`Welcome ${member}!`);
+				if (data.welcomeMsg) {
+					const replyMsg = formatString(data.welcomeMsg.message, member);
+					member.guild.channels.cache.get(data.welcomeMsg.channelId).send(replyMsg);
 				} else {
 					console.log('channel not found');
 				}
@@ -20,3 +21,12 @@ class GuildMemberAdd extends Event {
 }
 
 export default GuildMemberAdd;
+
+function formatString(str, member) {
+	const formattedString = str
+		.replaceAll('{{@user}}', member)
+		.replaceAll('{{username}}', member.user.username)
+		.replaceAll('{{usertag}}', member.user.tag);
+
+	return formattedString;
+}

@@ -17,6 +17,17 @@ const setup = {
 						.setDescription('The channel where the message is sent in')
 						.setRequired(true)
 				)
+		)
+		.addSubcommand((subcommand) =>
+			subcommand
+				.setName('suggestions')
+				.setDescription('Setup suggestions system for your server')
+				.addChannelOption((option) =>
+					option
+						.setName('channel')
+						.setDescription('The channel to send the suggestions in')
+						.setRequired(true)
+				)
 		),
 	settings: {
 		devOnly: false,
@@ -26,8 +37,8 @@ const setup = {
 		let subcmd = interaction.options.getSubcommand();
 		if (subcmd == 'welcome-channel') {
 			return setupWelcomeChannel(client, interaction);
-		} else if (subcmd == 'leave-message') {
-			return setupLeaveMessage(client, interaction);
+		} else if (subcmd == 'suggestions') {
+			return setupSuggestions(client, interaction);
 		}
 	},
 };
@@ -52,4 +63,23 @@ async function setupWelcomeChannel(client, interaction) {
 				}),
 		],
 	});
+}
+
+async function setupSuggestions(client, interaction) {
+	const channel = interaction.options.getChannel('channel');
+
+	const configSchema = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+
+	configSchema.suggestions = {
+		channelId: channel.id,
+	};
+	await configSchema.save();
+
+	const embed = new MessageEmbed()
+		.setTitle('Success!')
+		.setDescription(
+			`Your server now has access t suggestions! To suggest, simply navigate to ${channel} and send your suggestion!`
+		)
+		.setColor('GREEN')
+		.setTimestamp();
 }

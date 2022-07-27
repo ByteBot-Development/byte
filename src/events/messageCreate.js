@@ -1,28 +1,36 @@
 import Event from '../lib/classes/Event.js';
 import schema from '../lib/models/blacklistSchema.js';
 import util from 'util';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, ReactionEmoji } from 'discord.js';
+import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 class MessageCreate extends Event {
 	async run(message) {
 		if (message.author.bot) return;
+
+		const configSchema = await guildConfigSchema.findOne({ guildId: message.guild.id });
+		if (message.channel.id === configSchema.suggestions.channelId) {
+			return sendSuggestion(this.client, message);
+		}
 		const prefix = '--';
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
 		const cmd = args.shift().toLowerCase();
 
 		if (cmd === 'blacklist') {
 			if (!args[0] || args[0] == ` `)
-			return message.reply({
-				embeds: [
-					new MessageEmbed()
-						.setTitle(`Blacklist subcommands`)
-						.setDescription(`• add ~ \`Adds a blacklisted user\`\n• remove ~ \`Removes a blacklisted user!\``)
-						.setColor(`AQUA`),
-				],
-			});
+				return message.reply({
+					embeds: [
+						new MessageEmbed()
+							.setTitle(`Blacklist subcommands`)
+							.setDescription(
+								`• add ~ \`Adds a blacklisted user\`\n• remove ~ \`Removes a blacklisted user!\``
+							)
+							.setColor(`AQUA`),
+					],
+				});
 
 			let member = Number(args[1]);
 
-			let userCheck = `(${member})`
+			let userCheck = `(${member})`;
 
 			let check = await schema.findOne({
 				client: client.user.id,
@@ -42,10 +50,7 @@ class MessageCreate extends Event {
 					],
 				});
 
-
-
 			if (args[0] === `add`) {
-
 				if (check && check.userId.includes(member))
 					return message.reply({
 						embeds: [
@@ -130,10 +135,10 @@ class MessageCreate extends Event {
 						],
 					});
 
-					unBlacklist(this.client, member).then(() => {
-						message.reply({
-							embeds: [
-								new MessageEmbed()
+				unBlacklist(this.client, member).then(() => {
+					message.reply({
+						embeds: [
+							new MessageEmbed()
 								.setTitle(`Blacklist removed!`)
 								.setDescription(`${userCheck} has been removed from blacklist!`)
 								.setColor(`GREEN`)
@@ -141,9 +146,9 @@ class MessageCreate extends Event {
 									text: message.author.username,
 									iconURL: message.author.displayAvatarURL(),
 								}),
-							]
-						})
-					})
+						],
+					});
+				});
 			}
 		}
 	}
@@ -157,7 +162,7 @@ async function blacklist(client, user) {
 	});
 
 	if (!checking) {
-      await schema.create({
+		await schema.create({
 			client: client.user.id,
 		});
 	}
@@ -175,11 +180,35 @@ async function blacklist(client, user) {
 }
 
 async function unBlacklist(client, user) {
-	await schema.findOneAndUpdate({
-		client: client.user.id
-	}, {
-		$pull: {
-			userId: user
+	await schema.findOneAndUpdate(
+		{
+			client: client.user.id,
+		},
+		{
+			$pull: {
+				userId: user,
+			},
 		}
-	})
+	);
+}
+
+async function sendSuggestion(client, message) {
+	const { content } = message;
+
+	const embed = new MessageEmbed()
+		.setAuthor({
+			name: message.author.username,
+			iconURL: message.author.displayAvatarURL({ dynamic: true }),
+		})
+		.setDescription('- ' + content)
+		.addFields([{ name: 'Status', value: "⚪ Waiting for community's response..." }])
+		.setColor('WHITE')
+		.setFooter({
+			text: 'Wanna suggest something too? Just send your suggestion in this channel!',
+		});
+
+	const sentMessage = await message.channel.send({ embeds: [embed] });
+	await sentMessage.react('🟢');
+	await sentMessage.react('🔴');
+	await message.delete();
 }

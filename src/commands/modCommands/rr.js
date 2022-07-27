@@ -6,7 +6,7 @@ const reactionRole = {
 		.setDescription(`Sets up reaction roles`)
 		.addStringOption((option) =>
 			option
-				.setName(`message`)
+				.setName(`message-id`)
 				.setDescription(`The message-id you want to add the reaction-role to!`)
 				.setRequired(true)
 		)
@@ -21,7 +21,7 @@ const reactionRole = {
 		),
 
 	async run(client, interaction) {
-		let message = interaction.options.getString(`message`);
+		let message = interaction.options.getString(`message-id`);
 		let reaction = interaction.options.getString(`reaction`);
 		let role = interaction.options.getRole(`role`);
 
@@ -80,7 +80,7 @@ const reactionRole = {
 			}
 		});
 
-		await interaction.channel.send({
+		await interaction.reply({
 			embeds: [
 				new MessageEmbed()
 					.setTitle(`Reaction Added`)
