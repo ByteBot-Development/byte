@@ -5,7 +5,8 @@ const reactionRoleSchema = new model(
     'reactionRoleSchema',
     new Schema({
         guild: String,
-        message: Object
+        message: Object,
+        customId: String
     })
 )
 

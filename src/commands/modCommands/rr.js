@@ -1,108 +1,98 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import reactionRoleSchema from '../../lib/models/reactionRole.js'
-
+import { MessageEmbed } from 'discord.js';
 const reactionRole = {
 	data: new SlashCommandBuilder()
 		.setName(`reaction-role`)
 		.setDescription(`Sets up reaction roles`)
 		.addStringOption((option) =>
 			option
-				.setName(`type`)
-				.setDescription(`The type of message you want to add the reaction-role to!`)
-				.addChoices({ name: 'existing', value: `existing` }, { name: `create`, value: `create` })
+				.setName(`message`)
+				.setDescription(`The message-id you want to add the reaction-role to!`)
+				.setRequired(true)
+		)
+		.addStringOption((reaction) =>
+			reaction
+				.setName(`reaction`)
+				.setDescription(`The emoji which should be used for reacting`)
+				.setRequired(true)
+		)
+		.addRoleOption((role) =>
+			role.setName(`role`).setDescription(`Role to be given when reacting!`).setRequired(true)
 		),
 
 	async run(client, interaction) {
+		let message = interaction.options.getString(`message`);
+		let reaction = interaction.options.getString(`reaction`);
+		let role = interaction.options.getRole(`role`);
 
-		let schema = await reactionRoleSchema.findOne({
-			guild: interaction.guild.id
-		})
+		if (isNaN(message))
+			return await interaction.reply({
+				embeds: [
+					new MessageEmbed()
+						.setTitle(`Invalid`)
+						.setDescription(`Message ID's must be digits!`)
+						.setColor(`RED`),
+				],
+			});
 
-		if(!schema) {
-			await reactionRoleSchema.create({
-				guild: interaction.guild.id
-			})
-		}
+		if (message.length > 19 || message.length < 19)
+			return await interaction.reply({
+				embeds: [
+					new MessageEmbed()
+						.setTitle(`Invalid`)
+						.setDescription(
+							`Message ID's must be ${
+								message.length < 19 ? `19 digits in length!` : `must only be 19 digits!`
+							}`
+						)
+						.setColor(`RED`),
+				],
+			});
+		let messageCheck = await interaction.channel.messages.fetch(message);
 
-		const filter = (collected) => {
-			return collected.author.id === interaction.user.id;
-		};
-		let choice = interaction.options.getString(`type`);
-
-		if (choice === `existing`) {
-			let idCheck = await interaction.reply({
-				content: `Enter the id of the message that you want to add the reaction role to!`,
+		if (!messageCheck)
+			return await interaction.reply({
+				content: `Could not find a message with that id in ${interaction.channel}`,
 				ephemeral: true,
-				fetchReply: true,
 			});
 
-			let idCollector = idCheck.channel.createMessageCollector({
-				filter,
-				max: 1,
+		if (role.position >= interaction.guild.me.roles.highest.position)
+			return await interaction.reply({
+				content: `${role} is higher than me! Please move it below ${interaction.guild.me.roles.highest}`,
+				ephemeral: true,
 			});
-
-			idCollector.on(`collect`, async (collected) => {
-				if (isNaN(collected.content))
-					return await interaction.editReply({
-						content: `Message ID's must be valid!`,
-						ephemeral: true,
-					});
-			
-				try {
-				await collected.channel.messages.fetch(collected.content).then(async (m) => {
-					let emojiReply = await interaction.followUp({
-						content: `Type the emoji that you want into the chat now`,
-						ephemeral: true,
-						fetchReply: true,
-					});
-			
-
-					let emojiCollector = await emojiReply.channel.createMessageCollector({
-						filter,
-						 max: 1, 
-					});
-
-					emojiCollector.on(`collect`, async (emojiCollected) => {
-						
-						try {
-							
-							await m.react(emojiCollected.content);
-						} catch {
-							return await emojiReply.editReply({
-								content: `Please input a valid emoji`,
-								ephemeral: true,
-							});
-						}
-
-						await reactionRoleSchema.findOneAndUpdate({
-							guild: interaction.guild.id
-						}, {
-							message :{
-								message: collected.content,
-								emoji: emojiCollected.content
-							},
-						})
-					});
-
-				
-				});
-
-			} catch {
-				return await interaction.editReply({
-					content: `Could not find a message with that id in <#${interaction.channel.id}>`,
-					ephemeral: true
-				})
-			};
-		})
-
-
-
-	}
-
-		if (choice === `create`) {
+		try {
+			await messageCheck.react(reaction);
+		} catch {
+			return await interaction.reply({
+				content: `Please provide a valid emoji`,
+				ephemeral: true,
+			});
 		}
-	}
-}
 
+		const collector = messageCheck.createReactionCollector();
+
+		collector.on(`collect`, async (reaction1, user) => {
+			if (reaction1.emoji.name === reaction.slice(2).split(`:`)[0]) {
+				let memberCheck = interaction.guild.members.cache.get(user?.id)
+				let action = memberCheck.roles.cache.has(role.id) ? `remove` : `add`;
+				await memberCheck.roles[action](role.id); 
+			}
+		});
+
+		await interaction.channel.send({
+			embeds: [
+				new MessageEmbed()
+					.setTitle(`Reaction Added`)
+					.setDescription(`${reaction} has been added with the role ${role}`)
+					.setColor(`GREEN`)
+					.setFooter({
+						text: `${interaction.user.tag}`,
+						iconURL: interaction.member.displayAvatarURL(),
+					}),
+			],
+		});
+	},
+};
 
 export default reactionRole;
