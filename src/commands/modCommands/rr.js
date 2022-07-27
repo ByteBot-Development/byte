@@ -23,6 +23,7 @@ const reactionRole = {
 	async run(client, interaction) {
 		let message = interaction.options.getString(`message-id`);
 		let reaction = interaction.options.getString(`reaction`);
+		console.log(reaction);
 		let role = interaction.options.getRole(`role`);
 
 		if (isNaN(message))
@@ -73,10 +74,20 @@ const reactionRole = {
 		const collector = messageCheck.createReactionCollector();
 
 		collector.on(`collect`, async (reaction1, user) => {
-			if (reaction1.emoji.name === reaction.slice(2).split(`:`)[0]) {
-				let memberCheck = interaction.guild.members.cache.get(user?.id)
-				let action = memberCheck.roles.cache.has(role.id) ? `remove` : `add`;
-				await memberCheck.roles[action](role.id); 
+			//! console.log(reaction1.emoji + ', ' + reaction1.emoji.name + ', ' + reaction);
+			const params = {
+				interaction,
+				user,
+				role,
+			};
+			if (reaction.includes('<:')) {
+				if (reaction1.emoji.name === reaction.slice(2).split(`:`)[0]) {
+					return addRole(params);
+				}
+			} else if (!reaction.includes('<:')) {
+				if (reaction1.emoji.name == reaction) {
+					return addRole(params);
+				}
 			}
 		});
 
@@ -96,3 +107,9 @@ const reactionRole = {
 };
 
 export default reactionRole;
+
+async function addRole({ interaction, user, role }) {
+	let target = interaction.guild.members.cache.get(user?.id);
+	let action = target.roles.cache.has(role.id) ? `remove` : `add`;
+	await target.roles[action](role.id);
+}
