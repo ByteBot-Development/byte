@@ -23,7 +23,6 @@ const reactionRole = {
 	async run(client, interaction) {
 		let message = interaction.options.getString(`message-id`);
 		let reaction = interaction.options.getString(`reaction`);
-		console.log(reaction);
 		let role = interaction.options.getRole(`role`);
 
 		if (isNaN(message))
@@ -74,7 +73,6 @@ const reactionRole = {
 		const collector = messageCheck.createReactionCollector();
 
 		collector.on(`collect`, async (reaction1, user) => {
-			//! console.log(reaction1.emoji + ', ' + reaction1.emoji.name + ', ' + reaction);
 			const params = {
 				interaction,
 				user,
