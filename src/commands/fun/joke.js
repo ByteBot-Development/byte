@@ -35,7 +35,7 @@ async function fetchAndReturn(interaction, reply = true) {
 
     let collector = reply1.createMessageComponentCollector({
       time: 50000,
-      filter,
+//      filter,
       type: `BUTTON`,
       max: 1
     });
