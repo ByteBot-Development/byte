@@ -1,7 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { GuildMember, MessageEmbed, User } from 'discord.js';
+import { Command } from '../../lib/typings/CommandType';
 
-const _8ball = {
+const _8ball: Command = {
 	data: new SlashCommandBuilder()
 		.setName('8ball')
 		.setDescription('Let the bot answer the questions of the universe!')
@@ -17,13 +18,15 @@ const _8ball = {
 		const answers = [...positiveAnswers, ...negativeAnswers, ...neutralAnswers];
 		const random = Math.floor(Math.random() * answers.length);
 		const reply = answers[random];
+		const interactionUser = interaction.member?.user as User;
+		const interactionMember = interaction.member as GuildMember;
 
 		const embed = new MessageEmbed()
 			.setTitle('Q: ' + question)
 			.setDescription(`- ${reply}`)
 			.setAuthor({
-				name: interaction.member.user.tag,
-				iconURL: interaction.member.displayAvatarURL(),
+				name: interactionUser.tag,
+				iconURL: interactionMember.displayAvatarURL(),
 			});
 
 		if (positiveAnswers.includes(reply)) {

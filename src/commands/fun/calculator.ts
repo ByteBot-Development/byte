@@ -1,7 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Message, MessageEmbed } from 'discord.js';
+import { CommandInteraction, Message, MessageEmbed } from 'discord.js';
+import { Command } from '../../lib/typings/CommandType';
 
-async function calc(interaction, integer1, integer2, action) {
+async function calc(
+	interaction: CommandInteraction,
+	integer1: number,
+	integer2: number,
+	action: string
+) {
 	if (isNaN(integer1) || isNaN(integer2))
 		return await interaction.reply({
 			content: `Valid integers not provided`,
@@ -46,7 +52,7 @@ async function calc(interaction, integer1, integer2, action) {
 	}, 1500);
 }
 
-const calculator = {
+const calculator: Command = {
 	data: new SlashCommandBuilder()
 		.setName(`calculate`)
 		.setDescription(`Calculates given integers.`)
@@ -59,11 +65,17 @@ const calculator = {
 		.addIntegerOption((option) =>
 			option.setName(`integer_two`).setDescription(`Second Integer`).setRequired(true)
 		),
-
+	settings: {
+		devOnly: false,
+	},
 	async run(client, interaction) {
 		const integer1 = interaction.options.getInteger(`integer_one`);
 		const integer2 = interaction.options.getInteger(`integer_two`);
 		const action = interaction.options.getString(`action`);
+
+		if (!integer1 || !integer2 || !action) {
+			return interaction.reply('Invalid options provided! Please try again!');
+		}
 		calc(interaction, integer1, integer2, action);
 	},
 };

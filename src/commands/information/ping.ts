@@ -1,9 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { Command } from '../../lib/typings/CommandType';
 
-const ping = {
+const ping: Command = {
 	data: new SlashCommandBuilder().setName('ping').setDescription('pong dude!'),
+	settings: {
+		devOnly: false,
+	},
 	run(client, interaction) {
-		interaction.reply('Hello!');
+		return interaction.reply('Hello!');
 	},
 };
 

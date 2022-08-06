@@ -1,7 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { Command } from '../../lib/typings/CommandType';
 
-const rollDice = {
+const rollDice: Command = {
 	data: new SlashCommandBuilder()
 		.setName('roll-a-dice')
 		.setDescription('roll a dice and see how lucky you are!'),
@@ -49,7 +50,7 @@ const rollDice = {
 
 export default rollDice;
 
-async function replySequence(interaction) {
+async function replySequence(interaction: CommandInteraction) {
 	await interaction.reply('Generating your dice of fortune...');
 	await interaction.editReply('Rolling.');
 	setTimeout(async () => await interaction.editReply({ content: 'Rolling..' }), 500);
