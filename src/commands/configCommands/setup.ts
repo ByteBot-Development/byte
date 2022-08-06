@@ -1,8 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Permissions, MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed, Permissions } from 'discord.js';
+import Byte from '../../lib/classes/Byte.js';
 import guildConfigSchema from '../../lib/models/guildConfigSchema.js';
+import { Command } from '../../lib/typings/CommandType.js';
 
-const setup = {
+const setup: Command = {
 	data: new SlashCommandBuilder()
 		.setName('setup')
 		.setDescription('setup features of the bot for your server!')
@@ -45,12 +47,16 @@ const setup = {
 
 export default setup;
 
-async function setupWelcomeChannel(client, interaction) {
+async function setupWelcomeChannel(client: Byte, interaction: CommandInteraction) {
 	const channel = interaction.options.getChannel('channel');
+	if (!channel) {
+		return interaction.reply('Unexpected error occured! Please try again!');
+	}
 
-	guildConfigSchema
-		.findOneAndUpdate({ guildId: interaction.guild.id }, { welcomeChannelId: channel.id })
-		.catch((err) => console.error(err));
+	if (!interaction.guild)
+		guildConfigSchema
+			.findOneAndUpdate({ guildId: interaction.guild!.id }, { welcomeChannelId: channel.id })
+			.catch((err) => console.error(err));
 
 	await interaction.reply({
 		embeds: [
@@ -65,11 +71,20 @@ async function setupWelcomeChannel(client, interaction) {
 	});
 }
 
-async function setupSuggestions(client, interaction) {
+async function setupSuggestions(client: Byte, interaction: CommandInteraction) {
 	const channel = interaction.options.getChannel('channel');
+
+	if (!channel) return interaction.reply('Unexpected error occured! Please try again!');
+
+	if (!interaction.guild) {
+		return interaction.reply('This command can only be ran in a guild!');
+	}
 
 	const configSchema = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
 
+	if (!configSchema) {
+		return console.error('Setup Command: guildConfigSchema not found!');
+	}
 	configSchema.suggestions = {
 		channelId: channel.id,
 	};

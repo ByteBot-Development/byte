@@ -1,12 +1,16 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import config from '../../../config.js';
-import util from 'util';
 import { MessageEmbed } from 'discord.js';
-export const evalcmd = {
+import util from 'util';
+import config from '../../config.js';
+import { Command } from '../../lib/typings/CommandType.js';
+
+export const evalcmd: Command = {
 	data: new SlashCommandBuilder()
 		.setName(`eval`)
 		.setDescription(`Evaluates the given code`)
-		.addStringOption((code) => code.setName(`code`).setDescription(`Code to be evaled`).setRequired(true)),
+		.addStringOption((code) =>
+			code.setName(`code`).setDescription(`Code to be evaled`).setRequired(true)
+		),
 
 	settings: {
 		devOnly: true,
@@ -23,6 +27,9 @@ export const evalcmd = {
 
 		let code = interaction.options.getString(`code`);
 
+		if (!code) {
+			return interaction.reply('Unexpected error occured! Please try again!');
+		}
 		try {
 			if (code.includes(`await`)) {
 				let check = code.split(`await `)[1];
@@ -39,7 +46,9 @@ export const evalcmd = {
 				}
 			}
 
-			let evalCode = code.includes(`await`) ? `;(async () => { ${code} })().then(output =>  output)` : code;
+			let evalCode = code.includes(`await`)
+				? `;(async () => { ${code} })().then(output =>  output)`
+				: code;
 
 			code = code.replace(`token`, '[Something Important]');
 			let output;

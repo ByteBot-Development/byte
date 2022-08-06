@@ -1,7 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { ClientUser, MessageEmbed } from 'discord.js';
+import Byte from '../../lib/classes/Byte';
+import { Command } from '../../lib/typings/CommandType';
 
-const botInfo = {
+const botInfo: Command = {
 	data: new SlashCommandBuilder()
 		.setName('bot-info')
 		.setDescription('Get the information on the bot'),
@@ -12,14 +14,13 @@ const botInfo = {
 	async run(client, interaction) {
 		const devsArray = getBotDevs(client);
 		const devsNames = formatString(devsArray.toString());
-
 		let infoembed = new MessageEmbed()
 
 			.setTitle('Bot information')
 			.setDescription(
 				'Byte is a public multi-purpose bot. It has many functions including; Moderation, Economy, Auto roles, suggestion system, and logging. Currently this bot is on the road to be verified so if you would like to help us out please invite the bot to your server.'
 			)
-			.setThumbnail(client.user.avatarURL())
+			.setThumbnail(client.user?.avatarURL()!)
 			.addFields(
 				{ name: 'Owner: ', value: ' <@743932626196365343>' },
 				{
@@ -45,13 +46,13 @@ const botInfo = {
 
 export default botInfo;
 
-function getBotDevs(client) {
-	const devsList = [];
+function getBotDevs(client: Byte) {
+	const devsList: string[] = [];
 
-	client.config.devs.map((dev) => devsList.push(`<@${dev}>`));
+	client.config.devs.map((dev: string) => devsList.push(`<@${dev}>`));
 	return devsList;
 }
 
-function formatString(string) {
+function formatString(string: string) {
 	return string.replaceAll(',', ', ');
 }
