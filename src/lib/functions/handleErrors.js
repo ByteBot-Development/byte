@@ -1,4 +1,5 @@
 import { MessageEmbed } from 'discord.js';
+import { inspect } from 'util';
 async function handleErrors(client) {
 	let guild = await client.guilds.fetch(`949757251596451891`);
 	let channel = await guild.channels.fetch(`1004358056529899632`);
@@ -8,7 +9,8 @@ async function handleErrors(client) {
 				new MessageEmbed()
 					.setTitle(`Ran into an ${err.name}`)
 					.setDescription(`${err.stack.slice(0, 4096)}`)
-					.addField(`Originated at`, `${origin}`),
+					.addField(`Originated at`, `${origin}`)
+                    .setColor(`RED`)
 			],
 		});
 	});
@@ -17,8 +19,9 @@ async function handleErrors(client) {
 			embeds: [
 				new MessageEmbed()
 					.setTitle(`Ran into an unhandledRejection`)
-					.setDescription(`${reason.slice(0, 4096)}`)
-					.addField(`Originated at`, `${p}`),
+					.setDescription(`${reason.stack}`)
+					.addField(`Originated at`, `${inspect(p)}`)
+                    .setColor(`RED`)
 			],
 		});
 	});
@@ -28,7 +31,8 @@ async function handleErrors(client) {
 				new MessageEmbed()
 					.setTitle(`Ran into an ${err.name}`)
 					.setDescription(`${err.stack.slice(0, 4096)}`)
-					.addField(`Originated at`, `${origin}`),
+					.addField(`Originated at`, `${origin}`)
+                    .setColor(`RED`)
 			],
 		});
 	});
