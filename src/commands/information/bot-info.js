@@ -6,7 +6,7 @@ const botInfo = {
 		.setName('bot-info')
 		.setDescription('Get the information on the bot'),
 	settings: {
-		devOnly: false,
+		devOnly: false,	
 	},
 
 	async run(client, interaction) {
