@@ -5,6 +5,7 @@
     "body": [
       "import { SlashCommandBuilder } from '@discordjs/builders';",
       "import Byte from '../../lib/classes/Byte.js';",
+      "import { CommandInteraction } from 'discord.js';",
       "",
       "const ${1:$TM_FILENAME_BASE} = {",
       "\tdata: new SlashCommandBuilder()",

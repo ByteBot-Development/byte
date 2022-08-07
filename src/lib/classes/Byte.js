@@ -1,7 +1,8 @@
-import { Client, Collection, MessageEmbed } from 'discord.js';
-import intents from '../constants/intentsList.js';
-import config from '../../../config.js';
 import 'dotenv/config';
+
+import { Client, Collection, MessageEmbed } from 'discord.js';
+import config from '../../../config.js';
+import intents from '../constants/intentsList.js';
 
 class Byte extends Client {
 	constructor() {
@@ -14,10 +15,10 @@ class Byte extends Client {
 		this.events = new Collection();
 		this.slashcommands = new Collection();
 	}
-	async sendError(interaction, title, description) {
+	async sendError(interaction, title, description, isEphemeral) {
 		await interaction.reply({
 			embeds: [new MessageEmbed().setTitle(title).setDescription(description).setColor('RED')],
-			ephemeral: true,
+			ephemeral: isEphemeral || false,
 		});
 	}
 	async start() {
