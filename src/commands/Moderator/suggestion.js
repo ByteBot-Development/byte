@@ -40,6 +40,7 @@ const suggestion = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/suggestion deny/accept message-id reason`,
 	/**
 	 *
 	 * @param {Byte} client

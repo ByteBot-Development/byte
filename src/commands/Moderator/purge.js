@@ -10,6 +10,7 @@ const purge = {
 		.addNumberOption((option) =>
 			option.setName('amount').setDescription('The amount of messages to delete').setRequired(true)
 		),
+	syntax: `/purge amount`,
 	settings: {
 		devOnly: false,
 	},

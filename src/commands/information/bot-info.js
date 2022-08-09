@@ -8,6 +8,7 @@ const botInfo = {
 	settings: {
 		devOnly: false,	
 	},
+	syntax: `/bot-info`,
 
 	async run(client, interaction) {
 		const devsArray = getBotDevs(client);

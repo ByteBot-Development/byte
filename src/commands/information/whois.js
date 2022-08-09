@@ -11,6 +11,7 @@ const whois = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/whois @user`,
 
 	async run(client, interaction) {
 		const user = interaction.options.getUser('user');

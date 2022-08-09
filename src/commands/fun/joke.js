@@ -60,6 +60,7 @@ const joke = {
 	data: new SlashCommandBuilder()
     .setName(`joke`)
     .setDescription(`Tells you a joke`),
+    syntax: `/joke`,
 	async run(client, interaction) {
     fetchAndReturn(interaction)
 	},

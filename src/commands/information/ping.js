@@ -1,9 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 const ping = {
-	data: new SlashCommandBuilder().setName('ping').setDescription('pong dude!'),
+	data: new SlashCommandBuilder().setName('ping').setDescription('Returns bot ping.'),
+	syntax: `/ping`,
 	run(client, interaction) {
-		interaction.reply('Hello!');
+		interaction.reply(`Pong! ${client.ws.ping}ms api latency!`);
 	},
 };
 

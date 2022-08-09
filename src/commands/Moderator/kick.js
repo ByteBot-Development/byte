@@ -12,6 +12,7 @@ const kick = {
 			reason.setName(`reason`).setDescription(`The reason you want to kick the user for!`)
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
+	syntax: `/kick user reason`,
 
 	async run(client, interaction) {
 		const member = interaction.guild.members.cache.get(interaction.options.getUser(`member`).id);
