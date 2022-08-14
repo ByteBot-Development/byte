@@ -1,6 +1,6 @@
 import Event from '../lib/classes/Event.js';
-import commandList from '../lib/utils/commandList.js';
 import blacklistSchema from '../lib/models/blacklistSchema.js';
+import commandList from '../lib/utils/commandList.js';
 
 class InteractionCreate extends Event {
 	run(interaction) {
