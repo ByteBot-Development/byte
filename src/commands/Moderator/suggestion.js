@@ -63,6 +63,12 @@ export default suggestion;
 async function acceptSuggestion(client, interaction) {
 	const messageId = interaction.options.getString('message-id');
 
+	const check = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+
+	if (!check) {
+		await guildConfigSchema.create({ guildId: interaction.guild.id });
+	}
+
 	const configSchema = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
 	const { channelId: suggestionChannelId } = configSchema.suggestions;
 	const suggestionChannel = await interaction.guild.channels.fetch(suggestionChannelId);
@@ -103,6 +109,12 @@ async function acceptSuggestion(client, interaction) {
 async function denySuggestion(client, interaction) {
 	const messageId = interaction.options.getString('message-id');
 	const reason = interaction.options.getString('reason') || 'No reason provided';
+
+	const check = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+
+	if (!check) {
+		await guildConfigSchema.create({ guildId: interaction.guild.id });
+	}
 
 	const configSchema = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
 	const { channelId: suggestionChannelId } = configSchema.suggestions;
