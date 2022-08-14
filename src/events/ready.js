@@ -39,6 +39,10 @@ async function temp(client) {
 	const ids = client.guilds.cache.map((guild) => guild.id);
 
 	ids.forEach(async (guildId) => {
+		const check = await guildConfigSchema.findOne({ guildId });
+
+		if (check) return;
+
 		const configData = await guildConfigSchema.create({ guildId });
 	});
 }
