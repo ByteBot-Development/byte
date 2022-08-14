@@ -16,6 +16,7 @@ const unban = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/unban user-id reason`,
 
 	async run(client, interaction) {
 		if (!interaction.guild.me.permissions.has(`BAN_MEMBERS`))

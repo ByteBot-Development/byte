@@ -1,215 +1,85 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
-import { MessageActionRow, MessageButton } from 'discord.js';
-import { promisify } from 'util';
+import { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } from 'discord.js';
+import { readdirSync } from 'fs';
+
 const help = {
-	data: new SlashCommandBuilder().setName('help').setDescription('help menu'),
+	data: new SlashCommandBuilder().setName('help').setDescription('Stop it! Get some help.'),
+	syntax: `/help`,
 	async run(client, interaction) {
-		try {
-			const row = new MessageActionRow().addComponents(
-				new MessageButton().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
-				new MessageButton().setCustomId('Mod').setLabel('Moderation Commands').setStyle('PRIMARY'),
-				new MessageButton().setCustomId('Config').setLabel('Configuation Commands').setStyle('PRIMARY')
-			);
-			const row2 = new MessageActionRow().addComponents(
-				new MessageButton().setCustomId('Back').setLabel('back').setStyle('PRIMARY')
-			);
+		let folders = []
+		readdirSync('src/commands').forEach(async (folder) => {
+			if(folder === `Dev`) return;
+			folders.push(folder)
+		});
 
-			const HelpEmbed = new MessageEmbed()
-				.setTitle('``Help Panel``')
-				.setDescription('In order to use the bot, use the prefix ``-`` to use any commands.')
-				.setColor('#384281');
-
-			await interaction.reply({
-				embeds: [HelpEmbed],
-				components: [row],
-				ephemeral: true,
-			});
-			// interactionchannel.send({ embeds: [HelpEmbed], components: [row],  ephemeral: true})
-
-			client.on('interactionCreate', async (ButtonInteraction, interaction, message) => {
-				if (!ButtonInteraction.isButton()) return;
-
-				// await ButtonInteraction.deferUpdate()
-
-				if (ButtonInteraction.customId === 'Main') {
-					const infoEmbed = new MessageEmbed()
-						.setTitle('```Info Commands```')
-						.setColor('#384281')
-
-						.addFields({
-							name: '/botinfo',
-							value: `> Shows the help menu [This menu]`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/membercount',
-							value: `> Shows the amount of members in your server.`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/help',
-							value: `> Shows the help menu [this command]`,
-							inline: false,
-						})
-						.addFields({
-							name: '/membercount',
-							value: `> Shows the amount of members in your server.`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/ping',
-							value: `> Shows the bot's ping, uptime, version etc.`,
-							inline: false,
-						})
-						.addFields({
-							name: '/whois',
-							value: `> Gets info of a member.`,
-							inline: false,
-						});
-
-					const wait = promisify(setTimeout);
-
-					await wait(1000);
-					await ButtonInteraction.update({ embeds: [infoEmbed], components: [row2] });
-				}
-
-				if (ButtonInteraction.customId === 'Mod') {
-					const infoEmbed = new MessageEmbed()
-						.setTitle('```Moderation Commands```')
-						.setColor('#384281')
-
-						.addFields({
-							name: '/Kick [@ User, <reason>]',
-							value: `> Kicks a member from your server`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/Ban [@ User, <reason>]',
-							value: `> Bans a member from your server`,
-							inline: false,
-						})
-
-						.addFields({
-							name: 'Purge [Amount]',
-							value: `> Purge messages from a text channel`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/Mute [@ User, duration, reason ]',
-							value: `> Mutes a user`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/unmute [@ User ]',
-							value: `> Unmutes a user`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/announce [message]',
-							value: `> Make an announcement`,
-							inline: false,
-						})
-
-						.addFields({
-							name: '/unban [ID]',
-							value: `> Unban someone from the server.`,
-							inline: false,
-						});
-
-					const wait = promisify(setTimeout);
-
-					await ButtonInteraction.update({
-						embeds: [infoEmbed],
-						components: [row2],
-					}).catch((err) => {
-						return;
-					});
-					await wait(1000);
-					if (!ButtonInteraction) {
-						return;
+		let helpRow = new MessageActionRow().addComponents([
+			new MessageSelectMenu()
+				.setCustomId(`help-row`)
+				.setPlaceholder(`Commands`)
+				.addOptions(folders.map(m => {
+					return {
+						label: `${m}`,
+						description: `${m} commands`,
+						value: m
 					}
-				}
+				})),
+		]);
 
-				if (ButtonInteraction.customId === 'Config') {
-					const infoEmbed = new MessageEmbed()
-						.setTitle('```Configuation Commands```')
-						.setColor('#384281')
+		let helpReply = await interaction.reply({
+			embeds: [
+				new MessageEmbed()
+					.setTitle('Help Panel')
+					.setDescription('In order to use the bot, use ``/`` commands.')
+					.setColor('#00ff80'),
+			],
+			components: [helpRow],
+			ephemeral: true,
+			fetchReply: true
+		});
 
-						.addFields({
-							name: '/setautorole [@ role]',
-							value: `> Sets a role that is given to a user when they join`,
-							inline: false,
-						})
+		let HelpMenuCollector = helpReply.createMessageComponentCollector({
+			componentType: `SELECT_MENU`,
+			time: 15000
+		})
 
-						.addFields({
-							name: '/setmodlogs',
-							value: `> Sets channel to mod logs`,
-							inline: false,
-						})
+		HelpMenuCollector.on(`collect`, async (i) => {
+			HelpMenuCollector.resetTimer()
+			let commands = []
+			if(folders.includes(i.values[0])){
 
-						.addFields({
-							name: '/addmod',
-							value: `> Sets the role that is able to see tickets`,
-							inline: false,
-						})
+				readdirSync(`src/commands/${i.values[0]}`).forEach(async file => {
+					const fileData = await (await import(`../${i.values[0]}/${file}`))
+                    commands.push(fileData.default)
+				}) 
+				
+				setTimeout(async () => {
+				let commandsMapped = commands.map(m => `\`\`\`fix\n• Name: ${m.data.name},\n• Description: ${m.data.description ?? `No description`}\n• Syntax: ${m.syntax}\n\`\`\``).join(`\n`)
+					await i.update({
+						embeds: [
+							new MessageEmbed()
+							.setTitle(`${i.values[0]} Commands!`)
+							.setDescription(`${commandsMapped}`)
+							.setColor(`#00ff80`)
+						],
+						ephemeral: true
+					})
+				}, 500)
+			
 
-						.addFields({
-							name: '/setprefix',
-							value: `> Sets the bots prefix`,
-							inline: false,
-						});
-					// .setFooter("Prefix: ;")
-					const wait = promisify(setTimeout);
-					await ButtonInteraction.update({
-						embeds: [infoEmbed],
-						components: [row2],
-					}).catch((err) => {
-						return;
-					});
-					await wait(1000);
-					if (!ButtonInteraction) {
-						return;
-					}
-				}
+		
+			}
+		})
 
-				if (ButtonInteraction.customId === 'Back') {
-					const HelpEmbed = new MessageEmbed()
-						.setTitle('``Help Panel``')
-						.setDescription('In order to use the bot, use the prefix ``/`` to use any commands.')
-						.setColor('#384281');
-
-					const row4 = new MessageActionRow().addComponents(
-						new MessageButton().setCustomId('Main').setLabel('Info Commands').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('Mod').setLabel('Moderation Commands').setStyle('PRIMARY'),
-						new MessageButton().setCustomId('Config').setLabel('Configuation Commands').setStyle('PRIMARY')
-					);
-
-					const wait = promisify(setTimeout);
-
-					await ButtonInteraction.update({
-						embeds: [HelpEmbed],
-						components: [row4],
-					}).catch((err) => {
-						return;
-					});
-					await wait(1000);
-					if (!ButtonInteraction) {
-						return;
-					}
-				}
-			});
-		} catch (err) {
-			return;
-		}
+		HelpMenuCollector.on(`end`, async (collected, reason) => {
+            helpReply.components[0].components[0].disabled = true;
+            if(reason === `time`){
+				await interaction.editReply({
+					components:[helpReply.components[0]]
+				})  
+		 	}
+		})
 	},
 };
+
 
 export default help;

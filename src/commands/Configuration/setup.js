@@ -32,6 +32,7 @@ const setup = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/setup welcome-channel/suggestions channel(for welcome-channel only)`,
 
 	async run(client, interaction) {
 		let subcmd = interaction.options.getSubcommand();

@@ -1,9 +1,11 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { PermissionFlagsBits } from 'discord-api-types/v9'
 import { MessageEmbed } from 'discord.js';
 const reactionRole = {
 	data: new SlashCommandBuilder()
 		.setName(`reaction-role`)
 		.setDescription(`Sets up reaction roles`)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageServer)
 		.addStringOption((option) =>
 			option
 				.setName(`message-id`)
@@ -19,6 +21,7 @@ const reactionRole = {
 		.addRoleOption((role) =>
 			role.setName(`role`).setDescription(`Role to be given when reacting!`).setRequired(true)
 		),
+		syntax: `/reaction-role message-id emoji role`,
 
 	async run(client, interaction) {
 		let message = interaction.options.getString(`message-id`);

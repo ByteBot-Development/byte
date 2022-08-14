@@ -11,6 +11,7 @@ const _8ball = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/8ball question`,
 
 	async run(client, interaction) {
 		const question = interaction.options.getString('question');

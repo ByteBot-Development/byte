@@ -9,8 +9,9 @@ const botInfo = {
 		.setName('bot-info')
 		.setDescription('Get the information on the bot'),
 	settings: {
-		devOnly: false,
+		devOnly: false,	
 	},
+	syntax: `/bot-info`,
 
 	async run(client, interaction) {
 		const devsArray = getBotDevs(client);

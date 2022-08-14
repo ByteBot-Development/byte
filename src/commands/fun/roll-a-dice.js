@@ -8,6 +8,7 @@ const rollDice = {
 	settings: {
 		devOnly: false,
 	},
+	syntax: `/roll-a-dice`,
 
 	async run(client, interaction) {
 		// A function that replies with rolling. with a loading animation

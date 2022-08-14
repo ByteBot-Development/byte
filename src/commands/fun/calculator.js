@@ -1,5 +1,31 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Message, MessageEmbed } from 'discord.js';
+import {  MessageEmbed } from 'discord.js';
+
+const calculator = {
+	data: new SlashCommandBuilder()
+		.setName(`calculate`)
+		.setDescription(`Calculates given integers.`)
+		.addIntegerOption((option) =>
+			option.setName(`integer_one`).setDescription(`First Integer`).setRequired(true)
+		)
+		.addStringOption((option) =>
+			option.setName(`action`).setDescription(`Action for calculation`).setRequired(true)
+		)
+		.addIntegerOption((option) =>
+			option.setName(`integer_two`).setDescription(`Second Integer`).setRequired(true)
+		),
+		syntax: `/calculate integer action integer`,
+
+	async run(client, interaction) {
+		const integer1 = interaction.options.getInteger(`integer_one`);
+		const integer2 = interaction.options.getInteger(`integer_two`);
+		const action = interaction.options.getString(`action`);
+		calc(interaction, integer1, integer2, action);
+	},
+};
+
+export default calculator;
+
 
 async function calc(interaction, integer1, integer2, action) {
 	if (isNaN(integer1) || isNaN(integer2))
@@ -45,27 +71,3 @@ async function calc(interaction, integer1, integer2, action) {
 		});
 	}, 1500);
 }
-
-const calculator = {
-	data: new SlashCommandBuilder()
-		.setName(`calculate`)
-		.setDescription(`Calculates given integers.`)
-		.addIntegerOption((option) =>
-			option.setName(`integer_one`).setDescription(`First Integer`).setRequired(true)
-		)
-		.addStringOption((option) =>
-			option.setName(`action`).setDescription(`Action for calculation`).setRequired(true)
-		)
-		.addIntegerOption((option) =>
-			option.setName(`integer_two`).setDescription(`Second Integer`).setRequired(true)
-		),
-
-	async run(client, interaction) {
-		const integer1 = interaction.options.getInteger(`integer_one`);
-		const integer2 = interaction.options.getInteger(`integer_two`);
-		const action = interaction.options.getString(`action`);
-		calc(interaction, integer1, integer2, action);
-	},
-};
-
-export default calculator;

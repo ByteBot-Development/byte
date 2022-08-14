@@ -8,6 +8,7 @@ const ban = {
 		.addUserOption((user) => user.setName(`member`).setDescription(`The member you want to ban`).setRequired(true))
 		.addStringOption((reason) => reason.setName(`reason`).setDescription(`The reason you want to ban the user for!`))
 		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+	syntax: `/ban user reason`,
 
 	async run(client, interaction) {
 		const member = interaction.guild.members.cache.get(interaction.options.getUser(`member`).id);
