@@ -1,6 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed } from 'discord.js';
 
+const description =
+	'Byte is a muti-purpose discord bot which provides you features such as Moderation, Auto-Roles, Fun commands, Suggestions, logging and much more!';
+
 const botInfo = {
 	data: new SlashCommandBuilder()
 		.setName('bot-info')
@@ -16,17 +19,14 @@ const botInfo = {
 		let infoembed = new MessageEmbed()
 
 			.setTitle('Bot information')
-			.setDescription(
-				'Byte is a public multi-purpose bot. It has many functions including; Moderation, Economy, Auto roles, suggestion system, and logging. Currently this bot is on the road to be verified so if you would like to help us out please invite the bot to your server.'
-			)
-			.setThumbnail(client.user.avatarURL())
+			.setDescription(description)
+			.setThumbnail(client.user.avatarURL({ size: 4096 }))
 			.addFields(
 				{ name: 'Owner: ', value: ' <@743932626196365343>' },
 				{
 					name: 'Developers: ',
 					value: devsNames,
 				},
-				{ name: 'Last updated:', value: '4/28/2022' },
 				{
 					name: 'Changelog:',
 					value: '[Change log](https://sites.google.com/view/byteofficial/change-log)',
@@ -37,7 +37,7 @@ const botInfo = {
 				},
 				{ name: 'Created:', value: '1/22/2022' }
 			)
-			.setColor('#384281');
+			.setColor('BLURPLE');
 
 		interaction.reply({ embeds: [infoembed] });
 	},

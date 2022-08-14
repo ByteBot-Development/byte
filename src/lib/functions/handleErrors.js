@@ -17,7 +17,7 @@ async function handleErrors(client) {
 			embeds: [
 				new MessageEmbed()
 					.setTitle(`Ran into an unhandledRejection`)
-					.setDescription(`${reason.slice(0, 4096)}`)
+					.setDescription(reason)
 					.addField(`Originated at`, `${p}`),
 			],
 		});
