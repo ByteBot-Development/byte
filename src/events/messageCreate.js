@@ -8,6 +8,7 @@ class MessageCreate extends Event {
 		if (message.author.bot) return;
 
 		const configSchema = await guildConfigSchema.findOne({ guildId: message.guild.id });
+		if(!configSchema) return;
 		if (message.channel.id === configSchema.suggestions.channelId) {
 			return sendSuggestion(this.client, message);
 		}

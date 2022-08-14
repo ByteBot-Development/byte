@@ -5,7 +5,6 @@ import Byte from '../lib/classes/Byte.js';
 import Event from '../lib/classes/Event.js';
 import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 import commandList from '../lib/utils/commandList.js';
-
 class Ready extends Event {
 	async run() {
 		const { TOKEN, TEST_GUILD_ID, CLIENT_ID } = process.env;
@@ -43,7 +42,7 @@ async function temp(client) {
 
 		if (check) return;
 
-		const configData = await guildConfigSchema.create({ guildId });
+		//const configData = await guildConfigSchema.create({ guildId });
 	});
 }
 
