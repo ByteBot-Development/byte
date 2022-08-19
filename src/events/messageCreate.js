@@ -1,12 +1,17 @@
+import { MessageEmbed, ReactionEmoji } from 'discord.js';
+import util from 'util';
 import Event from '../lib/classes/Event.js';
 import schema from '../lib/models/blacklistSchema.js';
-import util from 'util';
-import { MessageEmbed, ReactionEmoji } from 'discord.js';
 import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 class MessageCreate extends Event {
 	async run(message) {
 		if (message.author.bot) return;
 
+		const check = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+
+		if (!check) {
+			await guildConfigSchema.create({ guildId: interaction.guild.id });
+		}
 		const configSchema = await guildConfigSchema.findOne({ guildId: message.guild.id });
 		if(!configSchema) return;
 		if (message.channel.id === configSchema.suggestions.channelId) {

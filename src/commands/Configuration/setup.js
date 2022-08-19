@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Permissions, MessageEmbed } from 'discord.js';
+import { MessageEmbed, Permissions } from 'discord.js';
 import guildConfigSchema from '../../lib/models/guildConfigSchema.js';
 
 const setup = {
@@ -48,6 +48,12 @@ export default setup;
 
 async function setupWelcomeChannel(client, interaction) {
 	const channel = interaction.options.getChannel('channel');
+
+	const check = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+
+	if (!check) {
+		await guildConfigSchema.create({ guildId: interaction.guild.id });
+	}
 
 	guildConfigSchema
 		.findOneAndUpdate({ guildId: interaction.guild.id }, { welcomeChannelId: channel.id })
