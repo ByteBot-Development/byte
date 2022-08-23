@@ -14,7 +14,9 @@ async function handleCommands(client, interaction) {
 			let check = await blacklistSchema.findOne({
 				client: client.user.id,
 			});
-
+			
+			if (!check) return
+			
 			if (check.userId.includes(interaction.member.id))
 				return await interaction.reply({
 					content: `You have been blacklisted from ${client.user.username}! You can no longer use any commands in this bot!`,
