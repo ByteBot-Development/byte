@@ -25,7 +25,7 @@ const unban = {
 			});
 		const userId = interaction.options.getString('user-id');
 		const reason = interaction.options.getString('reason');
-		const embed = new MessageEmbed().setTitle('User Unbanned!').setDescription();
+		const embed = new MessageEmbed().setTitle('User Unbanned!');
 	},
 };
 
