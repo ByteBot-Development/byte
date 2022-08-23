@@ -7,6 +7,8 @@ import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 import commandList from '../lib/utils/commandList.js';
 class Ready extends Event {
 	async run() {
+		setPresence(this.client);
+
 		const { TOKEN, TEST_GUILD_ID, CLIENT_ID } = process.env;
 		const rest = new REST({ version: '9' }).setToken(TOKEN);
 		const commandData = commandList.map((command) => command.data.toJSON());
@@ -48,3 +50,22 @@ async function temp(client) {
 }
 
 export default Ready;
+
+/**
+ *
+ * @param {Byte} client
+ */
+function setPresence(client) {
+	const amountOfGuilds = client.guilds.cache.size;
+	console.log(client.guilds.cache);
+
+	client.user.setPresence({
+		status: 'online',
+		activities: [
+			{
+				type: 'LISTENING',
+				name: `/help | serving ${amountOfGuilds} servers!`,
+			},
+		],
+	});
+}
