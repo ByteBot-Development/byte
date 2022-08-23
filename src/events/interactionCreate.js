@@ -9,6 +9,9 @@ class InteractionCreate extends Event {
 }
 
 async function handleCommands(client, interaction) {
+	if (!interaction.guild) {
+		interaction.reply("This command is only available in servers!")
+	}
 	for (const command of commandList) {
 		if (interaction.commandName === command.data.name) {
 			let check = await blacklistSchema.findOne({
