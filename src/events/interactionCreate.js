@@ -23,11 +23,6 @@ async function handleCommands(client, interaction) {
 				});
 			}
 			
-			if (check.userId.includes(interaction.member.id))
-				return await interaction.reply({
-					content: `You have been blacklisted from ${client.user.username}! You can no longer use any commands in this bot!`,
-					ephemeral: true,
-				});
 			if (command.settings != undefined) {
 				if (command.settings.devOnly && !client.config.devs.includes(interaction.member.id)) {
 					return interaction.reply({
