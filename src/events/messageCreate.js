@@ -6,13 +6,14 @@ import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 class MessageCreate extends Event {
 	async run(message) {
 		if (message.author.bot) return;
-
-		const check = await guildConfigSchema.findOne({ guildId: interaction.guild.id });
+		if (!message.guild) return
+		const check = await guildConfigSchema.findOne({ guildId: message.guild.id });
 
 		if (!check) {
-			await guildConfigSchema.create({ guildId: interaction.guild.id });
+			await guildConfigSchema.create({ guildId: message.guild.id });
 		}
 		const configSchema = await guildConfigSchema.findOne({ guildId: message.guild.id });
+		if(!configSchema) return;
 		if (message.channel.id === configSchema.suggestions.channelId) {
 			return sendSuggestion(this.client, message);
 		}

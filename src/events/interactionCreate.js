@@ -9,17 +9,23 @@ class InteractionCreate extends Event {
 }
 
 async function handleCommands(client, interaction) {
+	if (!interaction.guild) {
+		interaction.reply("This command is only available in servers!")
+	}
 	for (const command of commandList) {
 		if (interaction.commandName === command.data.name) {
 			let check = await blacklistSchema.findOne({
 				client: client.user.id,
 			});
-
-			if (check.userId.includes(interaction.member.id))
+			
+			if (check != null) {
+				if (check.userId.includes(interaction.member.id))
 				return await interaction.reply({
 					content: `You have been blacklisted from ${client.user.username}! You can no longer use any commands in this bot!`,
 					ephemeral: true,
 				});
+			}
+			
 			if (command.settings != undefined) {
 				if (command.settings.devOnly && !client.config.devs.includes(interaction.member.id)) {
 					return interaction.reply({

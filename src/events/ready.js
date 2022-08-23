@@ -5,13 +5,13 @@ import Byte from '../lib/classes/Byte.js';
 import Event from '../lib/classes/Event.js';
 import guildConfigSchema from '../lib/models/guildConfigSchema.js';
 import commandList from '../lib/utils/commandList.js';
-
 class Ready extends Event {
 	async run() {
 		const { TOKEN, TEST_GUILD_ID, CLIENT_ID } = process.env;
 		const rest = new REST({ version: '9' }).setToken(TOKEN);
 		const commandData = commandList.map((command) => command.data.toJSON());
-		const { registerSlashcommandGlobally } = config;
+		const rawGlobalData = process.env.GLOBAL_COMMANDS;
+		const registerSlashcommandGlobally = await JSON.parse(rawGlobalData.toLowerCase());
 
 		registerSlashcommandGlobally
 			? await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commandData })
@@ -43,7 +43,7 @@ async function temp(client) {
 
 		if (check) return;
 
-		const configData = await guildConfigSchema.create({ guildId });
+		//const configData = await guildConfigSchema.create({ guildId });
 	});
 }
 
