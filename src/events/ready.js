@@ -10,7 +10,8 @@ class Ready extends Event {
 		const { TOKEN, TEST_GUILD_ID, CLIENT_ID } = process.env;
 		const rest = new REST({ version: '9' }).setToken(TOKEN);
 		const commandData = commandList.map((command) => command.data.toJSON());
-		const { registerSlashcommandGlobally } = config;
+		const rawGlobalData = process.env.GLOBAL_COMMANDS;
+		const registerSlashcommandGlobally = await JSON.parse(rawGlobalData.toLowerCase());
 
 		registerSlashcommandGlobally
 			? await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commandData })
