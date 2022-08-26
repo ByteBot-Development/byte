@@ -1,8 +1,0 @@
-singleQuote: true
-arrowParens: always
-bracketSpacing: true
-printWidth: 99
-tabWidth: 2
-useTabs: true
-trailingComma: es5
-semi: true
