@@ -1,0 +1,53 @@
+{
+  "name": "byte",
+  "version": "3.0.0",
+  "description": "A general purpose Discord Bot written in typescript to provide you a bug free experience!",
+  "main": "dist/index.js",
+  "scripts": {
+    "test:types": "tsc --pretty --noEmit",
+    "test:format": "prettier --check .",
+    "test:lint": "eslint . --ext ts --ext js",
+    "test": "yarn run test:format && yarn run test:lint && yarn run test:types && yarn run build",
+    "format": "prettier --write .",
+    "build": "tsc",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.1",
+    "glob": "7.2"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/node": "^18.7.13",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.2",
+    "husky": "^8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoodBoyNeon/byte.git"
+  },
+  "keywords": [
+    "discord-bot",
+    "byte",
+    "discord.js"
+  ],
+  "author": {
+    "name": "GoodBoyNeon",
+    "email": "goodboyneon03@gmail.com",
+    "url": "https://goodboyneon.cf"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GoodBoyNeon/byte/issues"
+  },
+  "homepage": "https://github.com/GoodBoyNeon/byte#readme"
+}

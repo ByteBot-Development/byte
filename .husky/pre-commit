@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🔮📚 STYLING, LINTING AND CHECKING TYPES! PLEASE WAIT...'
+
+# Check types
+yarn run test:types || (
+    echo '📕 TYPES THREW AN ERROR! FIX BEFORE COMMITING!'
+    false;
+)
+
+# Check prettier
+yarn run test:format || (
+  echo '📕 INVALID CODE FORMATTING! FIX BEFORE COMMITING!'
+  false;
+)
+
+# Check lint
+yarn run test:lint || (
+  echo '📕 CODE HAS SOME LINTING ERRORS! FIX BEFORE COMMITING!'
+  false;
+)
+
+yarn run build || (
+  echo '📕 FAILED TO BUILD! CHECK ABOVE ERRORS!'
+)
+
+echo '📗 NO ERRORS FOUND! CONTINUING THE COMMIT...'
