@@ -10,6 +10,11 @@
     "test": "yarn run test:format && yarn run test:lint && yarn run test:types && yarn run build",
     "format": "prettier --write .",
     "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "prod": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "lint": "eslint .",
+    "start:js": "yarn run build && yarn run prod",
     "prepare": "husky install"
   },
   "dependencies": {

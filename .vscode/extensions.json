@@ -2,6 +2,6 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "christian-kohler.path-intellisense",
-    "eamodio.gitlens",
+    "eamodio.gitlens"
   ]
 }
